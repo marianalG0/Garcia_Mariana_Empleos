@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Listado de Ofertas de Trabajo</title>
+</head>
+<body>
+
+<!-- renderizando tipo de dato complejo8variable con varios elementos) -->
+	
+	<h1>Vacantes Disponibles</h1>
+	<ol>
+		<li th:each="tmpEmp:${empleos}" th:text="${tmpEmp}"></li>
+		<!-- Primero estamos leyendo CUANTAS lista hay, luego leemos los valores de la lista -->
+	</ol>
+</body>
+</html>
