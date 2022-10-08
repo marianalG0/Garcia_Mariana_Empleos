@@ -4,12 +4,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import net.itinajero.model.Categoria;
 import net.itinajero.repository.CategoriasRepository;
 import net.itinajero.service.ICategoriasService;
 
 @Service
+@Primary //Le decimos a spring que en nuestro controlador, cuando se inyecte una instancia en la variable servicecategorias
+		// automaticamente como encontrara 2, le decimos que utilice este
 public class CategoriaServicejpa implements ICategoriasService {
 	@Autowired
 	private CategoriasRepository categoriasRepo;//Con esta sintaxis automaticamente cuando se cree la instancia
