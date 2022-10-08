@@ -1,9 +1,22 @@
 package net.itinajero.model;
 
 import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+//import javax.persistence.Transient;
 
+@Entity//Agregando la anotacion entity
+@Table(name="Vacantes")//Agregando la tabla en la que se mapea
 public class vacante {
 
+	//Configurando llave primaria
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)//Proporcionamos como se genera la llave
 	private Integer id;
 	private String nombre;
 	private String descripcion;
@@ -13,7 +26,14 @@ public class vacante {
 	private String imagen="no-image.png";
 	private String estatus;
 	private String detalles;
-	private Categoria categoria;//Creando un atributo de tipo categoria, que es una clase que ya habiamos definido anteriormente
+	//@Transient = dice que ignore el atributo de abajo
+	//private Categoria categoria;
+
+	
+	//Configurando como una relacion uno a uno
+	@OneToOne //Marcamos una anotacion uno a uno
+	@JoinColumn(name="idCategoria")//Sirve para especificar la columna con la que se marca la relacion con laa dos tablas
+	private Categoria categoria;
 
 	public Integer getId() {
 		return id;
@@ -107,7 +127,7 @@ public class vacante {
 		return "Vacante [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", fecha=" + fecha
 				+ ", salario=" + salario + ", destacado=" + destacado + ", imagen=" + imagen + ", estatus=" + estatus
 				+ ", detalles=" + detalles + ", categoria=" + categoria + "]";
-	}//Unicamente para cuando imprimamos en consola y ver los valores que tiene cada propiedad 
+	}
 
 	
 	
