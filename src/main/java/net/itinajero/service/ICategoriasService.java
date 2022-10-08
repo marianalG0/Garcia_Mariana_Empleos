@@ -7,6 +7,10 @@ public interface ICategoriasService {
 	void guardar(Categoria categoria);
 	List<Categoria> buscarTodas();
 	Categoria buscarPorId(Integer idCategoria);	
+
+	// Ejercicio: Implementar método
+		void eliminar(Integer idCategoria);
+
 }
 
 /*
@@ -18,3 +22,5 @@ public interface ICategoriasService {
  					mostrar al usuario mensaje de confirmacion de registro guardado
  *4.Agregar un nuevo menu llamado categorias y cnfigurar la url al listado de categorias
  */
+
+

@@ -122,6 +122,10 @@ public class vacante {
 		this.categoria = categoria;
 	}
 
+	//Cambia la propiedad de el atributo imagen a nulo
+	public void reset() {
+		this.imagen=null;
+	}
 	@Override
 	public String toString() {
 		return "Vacante [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", fecha=" + fecha

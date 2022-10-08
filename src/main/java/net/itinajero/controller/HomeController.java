@@ -10,8 +10,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import net.itinajero.model.Perfil;
+import net.itinajero.model.Usuario;
 import net.itinajero.model.vacante;
+import net.itinajero.service.ICategoriasService;
+import net.itinajero.service.IUsuariosService;
 import net.itinajero.service.IVacantesServices;
 
 @Controller
@@ -19,6 +25,11 @@ public class HomeController {
 	
 	@Autowired
 	private IVacantesServices serviceVacantes;
+	
+	@Autowired
+    private IUsuariosService serviceUsuarios;
+	@Autowired
+	private ICategoriasService serviceCategorias;
 	
 	@GetMapping("/tabla")
 	public String mostrarTabla(Model model) {
@@ -87,9 +98,43 @@ public class HomeController {
 		return "home";
 	}
 	
-	@ModelAttribute //Con esta sintaxis podemos agregar al modelo todos los atributos qur queramos
+	@GetMapping("/signup")
+	public String registrarse(Usuario usuario,Model model) {
+		return "usuarios/formRegistro";
+	}
+	
+	@PostMapping("/signup")
+	public String guardarRegistro(Usuario usuario, RedirectAttributes attributes) {
+		 //Ejercicio.
+		 usuario.setEstatus(1);//Activo por defecto
+		 usuario.setFechaRegistro(new Date());//Fecha de registro, la actual
+		 
+		 Perfil perfil = new Perfil();
+		 perfil.setId(3);//PERFIL USUARIO
+		 usuario.agregar(perfil);
+		 
+		 /*Guardamos el usuario en la base de datos*/
+		serviceUsuarios.guardar(usuario);
+		attributes.addFlashAttribute("msg", "El registro fue guardado exitosamente");		
+		return "redirect:/usuarios/index";
+	}
+	
+	//Metodo 
+	@GetMapping("/search")
+	public String buscar(@ModelAttribute("search") vacante vacante) {//Agregamos modelAttribute con el parametro con el nombre del atributo con el que se hara el databinding
+		return "home";
+	}
+	
+	@ModelAttribute
 	public void setGenericos(Model model) {
-		model.addAttribute("vacantes",serviceVacantes.buscarDestacadas());
+		vacante vacanteSearch = new vacante();
+		vacanteSearch.reset();
+		model.addAttribute("vacantes", serviceVacantes.buscarDestacadas());
+		
+		//Listado de categorias
+		model.addAttribute("categorias", serviceCategorias.buscarTodas());
+
+		model.addAttribute("search", vacanteSearch);
 	}
 	
 }
