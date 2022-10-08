@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import net.itinajero.model.vacante;
 import net.itinajero.service.IVacantesServices;
@@ -78,9 +79,17 @@ public class HomeController {
 		model.addAttribute("vigente", vigente);
 		*/
 		
-		List<vacante> lista = serviceVacantes.buscarTodas();//estamos recuperando la lista de vacantes, utilizando nuestra clase de servicio 
-		model.addAttribute("vacantes",lista);//Agregando la lista al modelo 
+		/*YA NO ES NECESARIO ESTAS DOS LINEAS */
+		//List<vacante> lista = serviceVacantes.buscarTodas();//estamos recuperando la lista de vacantes, utilizando nuestra clase de servicio 
+		//model.addAttribute("vacantes",lista);//Agregando la lista al modelo 
+		
+		
 		return "home";
+	}
+	
+	@ModelAttribute //Con esta sintaxis podemos agregar al modelo todos los atributos qur queramos
+	public void setGenericos(Model model) {
+		model.addAttribute("vacantes",serviceVacantes.buscarDestacadas());
 	}
 	
 }

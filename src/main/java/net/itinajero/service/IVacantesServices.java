@@ -10,5 +10,7 @@ public interface IVacantesServices {
 	
 	//Metodo que no regresara nada, recibe como parametro el objeto de tipo vacante
 	void guardar(vacante vacante);
+	//Metodo que regresara una lista de objetos de tipo vacante 
+	List<vacante> buscarDestacadas();
 	
 }

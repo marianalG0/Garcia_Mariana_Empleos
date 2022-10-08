@@ -31,7 +31,7 @@ public class VacantesServicejpa implements IVacantesServices {
 		// llamamos el repo y utilizando el metodo, le psamos como param id
 		Optional<vacante>  optional = vacantesrepo.findById(idVacante);
 		if(optional.isPresent()) {
-			optional.get(); //retornamos lo que regrese el metodo get
+			return optional.get(); //retornamos lo que regrese el metodo get
 		}
 		return null;//retornamos nulo si no se encuentra
 	}
@@ -40,6 +40,12 @@ public class VacantesServicejpa implements IVacantesServices {
 	public void guardar(vacante vacante) {
 		vacantesrepo.save(vacante);
 
+	}
+
+	@Override
+	public List<vacante> buscarDestacadas() {
+		
+		return vacantesrepo.findByDestacadoAndEstatusOrderByIdDesc(1, "Aprobada");
 	}
 
 }
