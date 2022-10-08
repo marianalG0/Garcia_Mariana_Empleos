@@ -6,9 +6,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -121,8 +126,31 @@ public class HomeController {
 	
 	//Metodo 
 	@GetMapping("/search")
-	public String buscar(@ModelAttribute("search") vacante vacante) {//Agregamos modelAttribute con el parametro con el nombre del atributo con el que se hara el databinding
+	public String buscar(@ModelAttribute("search") vacante vacante,Model model) {//Agregamos modelAttribute con el parametro con el nombre del atributo con el que se hara el databinding
+		System.out.println("Buscando por :" + vacante);
+		
+		//where descripcion like '%?%'
+		ExampleMatcher matcher = ExampleMatcher.matching().withMatcher("descripcion", ExampleMatcher.GenericPropertyMatchers.contains());//Para cambiar la condicion y use operador like
+		
+		//Declarando variable de tipo example que reciba una muestra de tipo vacante
+		Example<vacante> example = Example.of(vacante, matcher);
+		//Declarar variable para guardar resultado
+		List<vacante> lista = serviceVacantes.buscarByExample(example);
+		//Agregando al modelo la lista para que se renderice en la pagina princípal 
+		model.addAttribute("vacantes",lista);
+		
+		
 		return "home";
+	}
+	
+	/*
+	 * @InitBinder para strings si los detecta vacios en el Data Binding los settea a NULL
+	 * @paramBinder
+	 * */
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));//Basicamente le decimos para los tipos de datos string vas a registrar
+				//un editor o modificador para este tipo de dato de tipo stringTrimmerEditor, si recibe true lo transforma a null
 	}
 	
 	@ModelAttribute

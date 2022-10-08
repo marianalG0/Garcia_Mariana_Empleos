@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -59,6 +61,14 @@ public class vacantesController {
 		//4. Agregar al menu una aopcion llamada vacantes configurando la url "vacantes/index"
 		
 		return "vacantes/listVacantes";
+	}
+	
+	//Recibe como parametro el objeto de tipo pageable
+	@GetMapping(value = "/indexPaginate")
+	public String mostrarIndexPaginado(Model model, Pageable page) {
+	Page<vacante>lista = serviceVacantes.buscarTodas(page);
+	model.addAttribute("vacantes", lista);
+	return "vacantes/listVacantes";
 	}
 	
 	@GetMapping("/create")
@@ -149,6 +159,8 @@ public class vacantesController {
 		
 		return "vacantes/formVacante";
 	}
+	
+	
 	
 	@GetMapping("/view/{id}")
 	public String verDetalle(@PathVariable("id") int idVacante,Model model){
