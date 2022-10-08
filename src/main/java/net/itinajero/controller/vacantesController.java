@@ -15,6 +15,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,7 +63,7 @@ public class vacantesController {
 	
 	@GetMapping("/create")
 	public String crear(vacante vacante, Model model) {//Pasamos un objeto tipo vacante para poder desplegar errores en la vista
-		model.addAttribute("categorias", serviceCategorias.buscarTodas() );//Ya tenemos en la vista este atributo qur nos regresa la lista de categorias
+		//model.addAttribute("categorias", serviceCategorias.buscarTodas() );//Ya tenemos en la vista este atributo qur nos regresa la lista de categorias
 		return "vacantes/formVacante";
 	}
 	
@@ -129,14 +130,25 @@ public class vacantesController {
 		return "vacantes/listVacantes"; 
 	}*/
 	
-	@GetMapping("/delete")
-	public String eliminar(@RequestParam("id") int idVacante, Model model) {
+	@GetMapping("/delete/{id}")
+	public String eliminar(@PathVariable ("id") int idVacante, RedirectAttributes attributes) {
 		System.out.println("Borrando vacante con id: " + idVacante);
-		model.addAttribute("id",idVacante);
+		serviceVacantes.eliminar(idVacante);//Ya estamos eliminando en base de datos
+		attributes.addFlashAttribute("msg","La vacante fue eliminada");
+		//model.addAttribute("id",idVacante); //No agregamos id al modelo por eso se elimina
 		
-		return "mensaje";
+		return "redirect:/vacantes/index";
 	}
 	
+	
+	//Metodo que va a buscar por id el objeto y lo enviara al formulario
+	@GetMapping("/edit/{id}")
+	public String editar(@PathVariable ("id") int idVacante, Model model ){
+		vacante vacante = serviceVacantes.buscarPorId(idVacante);
+		model.addAttribute("vacante", vacante);
+		
+		return "vacantes/formVacante";
+	}
 	
 	@GetMapping("/view/{id}")
 	public String verDetalle(@PathVariable("id") int idVacante,Model model){
@@ -148,6 +160,13 @@ public class vacantesController {
 		//Buscar los detalles de la vacante en la BD
 		return "detalle";
 		}//El metodo espera un tipo de dato numerico
+	
+	
+	//Agregando datos genericos o comunes para los metodos de este controlador
+	@ModelAttribute
+	public void setGenericos(Model model) {
+		model.addAttribute("categorias", serviceCategorias.buscarTodas() );
+	}
 	
 	
 	//Metodo publico

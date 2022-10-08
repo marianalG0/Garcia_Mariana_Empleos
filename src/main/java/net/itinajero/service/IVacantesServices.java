@@ -13,4 +13,7 @@ public interface IVacantesServices {
 	//Metodo que regresara una lista de objetos de tipo vacante 
 	List<vacante> buscarDestacadas();
 	
+	//Metodo que no regresa nada 
+	void eliminar(Integer idVacante);
+	
 }
