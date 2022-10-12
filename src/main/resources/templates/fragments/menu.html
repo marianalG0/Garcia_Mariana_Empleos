@@ -18,10 +18,21 @@
               <a class="nav-link" th:href="@{/usuarios/index}">Usuarios</a>
             </li>          
           </ul>  
-          <a class="btn btn-primary" th:href="@{/index}">Ingresar</a>&nbsp;
-          <a class="btn btn-primary" th:href="@{/signup}">Registrarse</a>&nbsp;
-          <!--<span th:if="${session.usuario != null}" class="text-light" th:text="'Bienvenido ' + ${session.usuario.email}"></span>&nbsp;-->
-          <span th:if="${session.usuario != null}" class="text-light" th:text="'Bienvenido ' + ${session.usuario.nombre}"></span>&nbsp;
-          <a class="btn btn-primary" th:href="@{/logout}">Salir</a>&nbsp;
+          
+          <!--  <a class="btn btn-primary" th:href="@{/index}">Ingresar</a>&nbsp;
+          <a class="btn btn-primary" th:href="@{/signup}">Registrarse</a>&nbsp;--> 
+          <div sec:authorize="isAnonymous()"><!-- Validar los usuarios anonimos -->
+				<a class="btn btn-primary" th:href="@{/index}">Ingresar</a>&nbsp;
+				<a class="btn btn-primary" th:href="@{/signup}">Registrarse</a>&nbsp;
+		  </div>
+
+          <!--<span th:if="${session.usuario != null}" class="text-light" th:text="'Bienvenido ' + ${session.usuario.nombre}"></span>&nbsp;-->
+          <!--<span class="text-light">Bienvenido</span>&nbsp;<span class="text-light" sec:authentication="name"></span>&nbsp;
+          <a class="btn btn-primary" th:href="@{/logout}">Salir</a>&nbsp;-->
+          
+          	<div sec:authorize="isAuthenticated()">
+				<span class="text-light">Bienvenido</span>&nbsp;<span class="text-light" sec:authentication="name"></span>&nbsp;
+				<a class="btn btn-primary" th:href="@{/logout}">Salir</a>
+			</div>
         </div>
 </nav>
