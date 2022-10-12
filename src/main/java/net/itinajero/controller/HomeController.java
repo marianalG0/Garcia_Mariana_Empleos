@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Example;
@@ -107,14 +109,26 @@ public class HomeController {
 	
 	//Metodo que renderiza al /, es decir al directorio raiz de la aplicación
 	@GetMapping("/index")
-	public String mostrarIndex(Authentication auth) {
+	public String mostrarIndex(Authentication auth, HttpSession session) {
 		String username = auth.getName();//Recupera el nombre del usuario
 		System.out.println("Nombre del usuario : " + username);
 		
 		//Vamos a recorrer nuestra colección de objectos de tipo GrantedAuthority
-		for( GrantedAuthority rol:auth.getAuthorities() ) {
+		for(GrantedAuthority rol: auth.getAuthorities() ) {
 			System.out.println("ROL: " + rol.getAuthority()); //Regresamos el nombre del rol
 
+		}
+		
+		//Le diremos que si el atributo usuario no existe, lo vamos a crear
+		if(session.getAttribute("usuario") == null) {
+			
+			//Recuperando el objeto usuario 
+			Usuario usuario = serviceUsuarios.buscarPorUsername(username); 	
+			//De esta forma no almacenamos la contraseña en la session
+			usuario.setPassword(null);
+			//Solo para saber si el objeto fue encontrado, desplegando en consola
+			System.out.println("Usuario : " + usuario);
+			session.setAttribute("usuario", usuario);//Almacenando datos en la sesion del usuario
 		}
 		
 		return "redirect:/";
