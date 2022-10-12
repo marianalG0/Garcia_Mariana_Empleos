@@ -61,10 +61,15 @@ public class CategoriasController {
 	
 	@GetMapping("/delete/{id}")
 	public String eliminar(@PathVariable ("id") int idCategoria, RedirectAttributes attributes) {
-		System.out.println("Borrando Categoria con id: " + idCategoria);
-		serviceCategorias.eliminar(idCategoria);//Ya estamos eliminando en base de datos
-		attributes.addFlashAttribute("msg","La categoria fue eliminada");
-		//model.addAttribute("id",idVacante); //No agregamos id al modelo por eso se elimina
+		
+		try {
+			System.out.println("Borrando Categoria con id: " + idCategoria);
+			serviceCategorias.eliminar(idCategoria);//Ya estamos eliminando en base de datos
+			attributes.addFlashAttribute("msg","La categoria fue eliminada");
+			//model.addAttribute("id",idVacante); //No agregamos id al modelo por eso se elimina
+		}catch(Exception e){
+			attributes.addFlashAttribute("msg","La categoria esta asignada a un vacante, no es posible eliminarse");
+		}
 		
 		return "redirect:/categorias/index";
 	}
