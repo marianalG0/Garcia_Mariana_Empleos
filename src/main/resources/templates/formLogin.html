@@ -26,6 +26,13 @@
         <div class="card">
           <div class="card-body">
             <form th:action="@{/login}" method="post" class="form-signin">
+               
+               <!-- Mostrando error de inicio de sesion por incorrecto ingreso de datos -->
+              	<div th:if="${param.error}">
+					<span class="text-danger">Usuario / Password incorrectos!</span>
+				</div>
+              
+              
               <div class="row">
                 <div class="col-md-4"> 
                 </div>  
